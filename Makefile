@@ -20,7 +20,7 @@ YELLOW = \033[1;33m
 RED = \033[0;31m
 NC = \033[0m # No Color
 
-.PHONY: help pull push validate backup clean setup test status entities reload format-yaml check-env
+.PHONY: help pull push validate backup clean setup test status entities reload format-yaml check-env generate-automation codex
 
 # Default target
 help:
@@ -35,6 +35,8 @@ help:
 	@echo "  $(YELLOW)test$(NC)     - Run validation tests (alias for validate)"
 	@echo "  $(YELLOW)status$(NC)   - Show configuration status and entity counts"
 	@echo "  $(YELLOW)entities$(NC) - Explore available entities (usage: make entities [ARGS='options'])"
+	@echo "  $(YELLOW)codex$(NC)    - Generate automation using OpenAI (interactive mode)"
+	@echo "  $(YELLOW)generate-automation$(NC) - Generate automation with options (usage: make generate-automation DESC='...' [SAVE=yes])"
 	@echo "  $(YELLOW)reload$(NC)   - Reload Home Assistant configuration (without pushing)"
 	@echo "  $(YELLOW)format-yaml$(NC) - Format YAML files (usage: make format-yaml [FILES='file1.yaml file2.yaml'])"
 	@echo "  $(YELLOW)check-env$(NC) - Validate environment configuration (.env file)"
@@ -81,7 +83,7 @@ setup:
 	@echo "$(GREEN)Setting up Python environment...$(NC)"
 	@python3 -m venv $(VENV_PATH)
 	@. $(VENV_PATH)/bin/activate && pip install --upgrade pip
-	@. $(VENV_PATH)/bin/activate && pip install homeassistant voluptuous pyyaml jsonschema requests
+	@. $(VENV_PATH)/bin/activate && pip install homeassistant voluptuous pyyaml jsonschema requests openai
 	@echo "$(GREEN)Setup complete!$(NC)"
 
 # Show configuration status
@@ -116,6 +118,49 @@ entities: check-setup
 	@echo "  make entities ARGS='--full'            - Show complete detailed output"
 	@echo ""
 	@. $(VENV_PATH)/bin/activate && python $(TOOLS_PATH)/entity_explorer.py $(ARGS)
+
+# Generate automation using OpenAI Codex (interactive mode)
+codex: check-setup
+	@echo "$(GREEN)OpenAI Codex Automation Generator$(NC)"
+	@echo "=================================="
+	@if [ -z "$(OPENAI_API_KEY)" ]; then \
+		echo "$(RED)Error: OPENAI_API_KEY not set.$(NC)"; \
+		echo "$(YELLOW)Please set it in your .env file or environment:$(NC)"; \
+		echo "  OPENAI_API_KEY=your-api-key-here"; \
+		echo ""; \
+		echo "Get an API key from: https://platform.openai.com/api-keys"; \
+		exit 1; \
+	fi
+	@. $(VENV_PATH)/bin/activate && python $(TOOLS_PATH)/codex_automation_generator.py
+
+# Generate automation with description and options
+generate-automation: check-setup
+	@echo "$(GREEN)OpenAI Codex Automation Generator$(NC)"
+	@echo "=================================="
+	@if [ -z "$(OPENAI_API_KEY)" ]; then \
+		echo "$(RED)Error: OPENAI_API_KEY not set.$(NC)"; \
+		echo "$(YELLOW)Please set it in your .env file or environment:$(NC)"; \
+		echo "  OPENAI_API_KEY=your-api-key-here"; \
+		exit 1; \
+	fi
+	@if [ -z "$(DESC)" ]; then \
+		echo "$(RED)Error: DESC parameter required.$(NC)"; \
+		echo "$(YELLOW)Usage:$(NC)"; \
+		echo "  make generate-automation DESC='Turn on lights at sunset'"; \
+		echo "  make generate-automation DESC='Motion lights in basement' SAVE=yes"; \
+		echo "  make generate-automation DESC='Close garage at 10pm' MODEL=gpt-3.5-turbo"; \
+		exit 1; \
+	fi
+	@SAVE_FLAG=""; \
+	if [ "$(SAVE)" = "yes" ] || [ "$(SAVE)" = "y" ] || [ "$(SAVE)" = "true" ]; then \
+		SAVE_FLAG="--save"; \
+	fi; \
+	MODEL_FLAG=""; \
+	if [ -n "$(MODEL)" ]; then \
+		MODEL_FLAG="--model $(MODEL)"; \
+	fi; \
+	. $(VENV_PATH)/bin/activate && python $(TOOLS_PATH)/codex_automation_generator.py \
+		--description "$(DESC)" $$SAVE_FLAG $$MODEL_FLAG
 
 # Reload Home Assistant configuration via API
 reload: check-setup

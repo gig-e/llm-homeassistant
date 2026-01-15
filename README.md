@@ -1,13 +1,14 @@
-# Home Assistant Configuration Management with Claude Code
+# Home Assistant Configuration Management with AI-Powered Automation
 
-A comprehensive system for managing Home Assistant configurations with automated validation, testing, and deployment - all enhanced by Claude Code for natural language automation creation.
+A comprehensive system for managing Home Assistant configurations with automated validation, testing, and deployment - enhanced by AI for natural language automation creation using either Claude Code or OpenAI Codex.
 
 [![](https://github.com/user-attachments/assets/e4bb0179-a649-42d6-98f1-d8c29d5e84a3)](https://youtu.be/70VUzSw15-4)
 Click to play
 
 ## 🌟 Features
 
-- **🤖 AI-Powered Automation Creation**: Use Claude Code to write automations in plain English
+- **🤖 AI-Powered Automation Creation**: Choose between Claude Code or OpenAI Codex to write automations in plain English
+- **🎯 Dual AI Support**: Use Claude Code for interactive creation or OpenAI API (GPT-4/GPT-3.5) for batch generation
 - **🛡️ Multi-Layer Validation**: Comprehensive validation prevents broken configurations
 - **🔄 Safe Deployments**: Pre-push validation blocks invalid configs from reaching HA
 - **🔍 Entity Discovery**: Advanced tools to explore and search available entities
@@ -90,6 +91,10 @@ HA_URL=http://your_homeassistant_host:8123
 # SSH Configuration for rsync operations
 HA_HOST=your_homeassistant_host
 HA_REMOTE_PATH=/config/
+
+# OpenAI API Configuration (optional - for Codex automation generation)
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4  # Options: gpt-4, gpt-4-turbo-preview, gpt-3.5-turbo
 
 # Local Configuration (optional - defaults provided)
 LOCAL_CONFIG_PATH=config/
@@ -232,12 +237,13 @@ xcode-select --install  # Installs Command Line Tools including make
 │   ├── automations.yaml
 │   ├── scripts.yaml
 │   └── .storage/          # Entity registry (pulled from HA)
-├── tools/                 # Validation scripts for Claude
+├── tools/                 # Validation scripts and AI tools
 │   ├── run_tests.py       # Main test suite runner
 │   ├── yaml_validator.py  # YAML syntax validation
 │   ├── reference_validator.py # Entity reference validation
 │   ├── ha_official_validator.py # Official HA validation
-│   └── entity_explorer.py # Entity discovery tool
+│   ├── entity_explorer.py # Entity discovery tool
+│   └── codex_automation_generator.py # OpenAI Codex automation generator
 ├── .claude-code/          # Claude Code project settings
 │   ├── hooks/            # Automated validation hooks
 │   └── settings.json     # Project configuration
@@ -264,6 +270,21 @@ make entities ARGS='--domain climate'   # Climate entities only
 make entities ARGS='--search motion'    # Search for motion sensors
 make entities ARGS='--area kitchen'     # Kitchen entities only
 make entities ARGS='--full'            # Complete detailed output
+```
+
+### AI Automation Generation
+```bash
+# OpenAI Codex - Interactive mode
+make codex
+
+# OpenAI Codex - Quick generation
+make generate-automation DESC='Turn on living room lights at sunset'
+
+# OpenAI Codex - Generate and save
+make generate-automation DESC='Motion lights in basement' SAVE=yes
+
+# OpenAI Codex - Use specific model
+make generate-automation DESC='Close garage at 10pm' MODEL=gpt-3.5-turbo SAVE=yes
 ```
 
 ### Individual Validators
@@ -294,31 +315,13 @@ The system provides three layers of validation:
 - Most comprehensive check available
 - Catches integration-specific issues
 
-## 🤖 Claude Code Integration
+## 🤖 AI-Powered Automation Creation
 
-### Automated Validation Hooks
+This project supports **two methods** for AI-powered automation generation:
 
-Two hooks ensure configuration safety:
+### Method 1: Claude Code (Interactive)
 
-1. **Post-Edit Hook**: Runs validation after editing YAML files
-2. **Pre-Push Hook**: Validates before syncing to HA (blocks if invalid)
-
-### Entity Naming Convention
-
-This system supports standardized entity naming:
-
-**Format: `location_room_device_sensor`**
-
-Examples:
-```
-binary_sensor.home_basement_motion_battery
-media_player.office_kitchen_sonos
-climate.home_living_room_heatpump
-```
-
-### Natural Language Automation Creation
-
-With Claude Code, you can:
+Use Claude Code CLI for conversational automation creation:
 
 1. **Describe automations in English**:
    ```
@@ -343,6 +346,71 @@ With Claude Code, you can:
 
 3. **Automatic validation ensures correctness**
 4. **Deploy safely with `make push`**
+
+**Best for**: Interactive development, complex logic, code review
+
+### Method 2: OpenAI Codex (Standalone Tool)
+
+Use OpenAI API for batch automation generation:
+
+**Setup**:
+1. Get API key from [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Add to `.env`: `OPENAI_API_KEY=your-key-here`
+3. Optionally set model: `OPENAI_MODEL=gpt-4`
+
+**Usage**:
+```bash
+# Interactive mode
+make codex
+
+# Quick generation
+make generate-automation DESC='Turn on kitchen lights when motion detected'
+
+# Generate and save automatically
+make generate-automation DESC='Motion activated basement lights' SAVE=yes
+
+# Use GPT-3.5 for faster/cheaper generation
+make generate-automation DESC='Close garage at 10pm' MODEL=gpt-3.5-turbo
+```
+
+**Best for**: Batch generation, specific model preferences, API workflows
+
+### Choosing Your AI Method
+
+| Feature | Claude Code | OpenAI Codex |
+|---------|-------------|--------------|
+| **Setup** | Just open Claude Code | Requires OpenAI API key |
+| **Cost** | Claude subscription | Pay per token |
+| **Interaction** | Conversational | Command-based |
+| **Context** | Full codebase awareness | Entity registry context |
+| **Validation** | Automatic | Automatic |
+| **Best for** | Interactive development | Batch generation |
+
+Both methods:
+- ✅ Support entity naming conventions
+- ✅ Integrate with validation pipeline
+- ✅ Generate valid Home Assistant YAML
+- ✅ Use entity discovery for context
+
+### Automated Validation Hooks
+
+Two hooks ensure configuration safety:
+
+1. **Post-Edit Hook**: Runs validation after editing YAML files
+2. **Pre-Push Hook**: Validates before syncing to HA (blocks if invalid)
+
+### Entity Naming Convention
+
+This system supports standardized entity naming:
+
+**Format: `location_room_device_sensor`**
+
+Examples:
+```
+binary_sensor.home_basement_motion_battery
+media_player.office_kitchen_sonos
+climate.home_living_room_heatpump
+```
 
 ## 📊 Entity Discovery
 

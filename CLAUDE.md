@@ -35,6 +35,52 @@ This repository manages Home Assistant configuration files with automated valida
   - `--area AREA` - Show entities from specific area
   - `--full` - Show complete detailed output
 
+### AI-Powered Automation Generation
+- `make codex` - Generate automations using OpenAI (interactive mode)
+- `make generate-automation DESC='...'` - Generate automation from description
+  - `DESC='description'` - Natural language description (required)
+  - `SAVE=yes` - Automatically save to automations.yaml
+  - `MODEL=gpt-3.5-turbo` - Specify OpenAI model (default: gpt-4)
+- `python tools/codex_automation_generator.py` - Direct tool access with full options
+  - `--description "..."` - Automation description
+  - `--save` - Save generated automation
+  - `--output file.yaml` - Custom output file
+  - `--model MODEL` - OpenAI model to use
+  - `--temperature 0.7` - Sampling temperature (0.0-2.0)
+
+**Setup Requirements:**
+1. Get OpenAI API key from https://platform.openai.com/api-keys
+2. Add to `.env` file: `OPENAI_API_KEY=your-key-here`
+3. Optionally set model: `OPENAI_MODEL=gpt-4` (default)
+
+**Usage Examples:**
+```bash
+# Interactive mode (prompts for description)
+make codex
+
+# Quick generation
+make generate-automation DESC='Turn on living room lights at sunset'
+
+# Generate and save
+make generate-automation DESC='Motion activated basement lights' SAVE=yes
+
+# Use GPT-3.5 for faster/cheaper generation
+make generate-automation DESC='Close garage at 10pm' MODEL=gpt-3.5-turbo SAVE=yes
+
+# Advanced usage with Python tool
+source venv/bin/activate && python tools/codex_automation_generator.py \
+  --description "Turn on kitchen lights when motion detected between sunset and 11pm" \
+  --save \
+  --temperature 0.5
+```
+
+**Features:**
+- Context-aware generation using your entity registry
+- Follows Home Assistant naming conventions
+- Automatic validation of generated YAML
+- Integration with existing validation pipeline
+- Supports all OpenAI models (GPT-4, GPT-3.5-turbo, etc.)
+
 ## Validation System
 
 This project includes comprehensive validation to prevent invalid configurations:
@@ -78,6 +124,7 @@ The system tracks entities across these domains:
 - ✅ **Safe Deployments**: Pre-push validation prevents broken configs
 - ✅ **Entity Validation**: Ensures all references point to real entities
 - ✅ **Entity Discovery**: Advanced tools to explore and search available entities
+- ✅ **AI-Powered Automation**: Generate automations using OpenAI (Claude Code or Codex)
 - ✅ **Official HA Tools**: Uses Home Assistant's own validation
 - ✅ **YAML Support**: Handles HA-specific tags (!include, !secret, !input)
 - ✅ **Comprehensive Testing**: Multiple validation layers
@@ -155,9 +202,33 @@ vacuum.office_roborock
 - New entities should follow this pattern
 - Vendor prefixes (aquanta_, august_, etc.) are replaced with descriptive device names
 
-### **Claude Code Integration:**
+### **AI-Powered Automation Creation:**
+
+This project supports two methods for generating automations with AI:
+
+**1. Claude Code (Interactive)** - Current default when using Claude Code CLI
+- Natural language automation creation through Claude
+- Direct integration with the codebase
+- Follows all validation and naming conventions
+- Best for: Interactive development, complex logic, code review
+
+**2. OpenAI Codex (make codex)** - Alternative AI generation
+- Uses OpenAI API (GPT-4, GPT-3.5-turbo, etc.)
+- Standalone tool with context-aware generation
+- Automatic validation and entity discovery integration
+- Best for: Batch generation, specific model preferences, API-based workflows
+
+**Guidelines for Both Methods:**
 - When creating automations, always ask the user for input if there are multiple choices for sensors or devices
 - Use the entity explorer tools to discover available entities before writing automations
 - Follow the naming convention when suggesting entity names in automations
+- Run validation after generation: `make validate`
+
+**Choosing Between Claude Code and Codex:**
+- Use **Claude Code** for interactive, conversational automation creation
+- Use **make codex** when you want OpenAI-specific models or standalone generation
+- Both methods integrate with the same validation pipeline
+- Both support the entity naming convention
+- Results from both methods are validated identically
 
 - All python tools need to be run with  `source venv/bin/activate && python <tool_path>`
