@@ -1,8 +1,19 @@
 # Home Assistant Configuration Management
 
-## Overview
+## Your Role
 
-Manage Home Assistant configurations with automated validation, testing, and deployment. Help users create automations, validate configs, explore entities, and deploy safely.
+You're helping manage Home Assistant configurations with automated validation, testing, and safe deployment. When the user asks you to create automations, validate configs, explore entities, or troubleshoot issues - use the commands and workflows below.
+
+**Working Directory**: `/home/user/llm-homeassistant`
+
+## Getting Started
+
+When asked to work on this project:
+1. **Read files first** - Always read `config/automations.yaml` or relevant files before editing
+2. **Discover entities** - Use `make entities ARGS='--search keyword'` to find available devices
+3. **Follow naming convention** - Entity IDs use `location_room_device_sensor` format
+4. **Validate everything** - Run `make validate` after any config changes
+5. **Ask when unclear** - If multiple entity options exist, ask the user which one
 
 ## Quick Commands
 
@@ -22,14 +33,18 @@ make entities ARGS='--search motion'   # Search entities
 make entities ARGS='--area kitchen'    # Filter by area
 ```
 
-### Validation Tools
+### Testing & Validation
 ```bash
-# Always activate venv first
+make validate      # Run all validations (ALWAYS do this after edits)
+
+# Individual validators (if needed):
 source venv/bin/activate && python tools/run_tests.py              # Full suite
-source venv/bin/activate && python tools/yaml_validator.py         # YAML syntax
-source venv/bin/activate && python tools/reference_validator.py    # Entity refs
-source venv/bin/activate && python tools/ha_official_validator.py  # Official HA
+source venv/bin/activate && python tools/yaml_validator.py         # YAML syntax only
+source venv/bin/activate && python tools/reference_validator.py    # Entity refs only
+source venv/bin/activate && python tools/ha_official_validator.py  # Official HA only
 ```
+
+**Important**: Never suggest pushing configs until `make validate` passes cleanly.
 
 ## Project Structure
 
