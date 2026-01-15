@@ -204,7 +204,7 @@ vacuum.office_roborock
 
 ### **AI-Powered Automation:**
 
-This project supports multiple AI assistants for managing your Home Assistant configuration:
+This project supports two AI assistants for managing your Home Assistant configuration:
 
 **1. Claude Code (Interactive Assistant)** - You're using this now!
 - Run `claude` in this directory
@@ -220,24 +220,14 @@ This project supports multiple AI assistants for managing your Home Assistant co
 - Handles any task like Claude Code
 - Best for: Using OpenAI models, teams preferring OpenAI
 
-**3. OpenAI Automation Generator** - Quick automation tool
-- Run `make codex` or `make generate-automation DESC='...'`
-- Uses OpenAI API with entity registry context
-- Generates single automation from description
-- Best for: Batch generation, simple one-off automations, scripting
-
 **Quick Reference:**
 ```bash
-# Interactive AI assistants (full capabilities)
+# Interactive AI assistants
 claude                                    # Claude Code (you're using this)
 codex                                     # OpenAI Codex (if installed)
-
-# Quick automation generation
-make codex                                # OpenAI (interactive prompt)
-make generate-automation DESC='...'       # OpenAI (command line)
 ```
 
-**All methods:**
+**Both assistants:**
 - Ask for clarification when multiple entity choices exist
 - Use entity explorer tools to discover available entities
 - Follow naming convention: location_room_device_sensor

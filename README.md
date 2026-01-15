@@ -317,9 +317,9 @@ The system provides three layers of validation:
 
 ## 🤖 AI-Powered Automation
 
-This project supports multiple AI assistants and tools for managing your Home Assistant configuration:
+This project supports two AI assistants for managing your Home Assistant configuration:
 
-### Method 1: Claude Code (Interactive Assistant)
+### Claude Code (Interactive Assistant)
 
 Full-featured conversational AI through Claude Code CLI:
 
@@ -332,7 +332,7 @@ Full-featured conversational AI through Claude Code CLI:
 
 **Best for**: Interactive development, complex multi-step tasks, code review, learning
 
-### Method 2: OpenAI Codex (Interactive Assistant)
+### OpenAI Codex (Interactive Assistant)
 
 Full-featured conversational AI through OpenAI Codex CLI - works just like Claude Code:
 
@@ -349,45 +349,19 @@ Full-featured conversational AI through OpenAI Codex CLI - works just like Claud
 
 **Best for**: Using OpenAI models, API-based workflows, teams preferring OpenAI
 
-### Method 3: OpenAI Automation Generator (Quick Tool)
+### Choosing Your AI Assistant
 
-Quick automation generation for single-purpose tasks:
+| Feature | Claude Code | OpenAI Codex |
+|---------|-------------|--------------|
+| **Type** | Interactive assistant | Interactive assistant |
+| **Setup** | Install Claude CLI | Install Codex CLI |
+| **Usage** | `claude` | `codex` |
+| **Capabilities** | Full project | Full project |
+| **Context** | Full codebase | Full project via tools |
+| **Instructions** | CLAUDE.md | AGENTS.md |
+| **Best for** | Interactive dev | OpenAI preference |
 
-**Setup**:
-1. Get API key from [OpenAI Platform](https://platform.openai.com/api-keys)
-2. Add to `.env`: `OPENAI_API_KEY=your-key-here`
-3. Optionally set model: `OPENAI_MODEL=gpt-4`
-
-**Usage**:
-```bash
-# Interactive prompt
-make codex
-
-# Command line (quick)
-make generate-automation DESC='Turn on kitchen lights when motion detected'
-
-# Generate and save
-make generate-automation DESC='Motion activated basement lights' SAVE=yes
-
-# Use GPT-3.5 (faster/cheaper)
-make generate-automation DESC='Close garage at 10pm' MODEL=gpt-3.5-turbo
-```
-
-**Best for**: Batch generation, quick one-off automations, scripting
-
-### Choosing Your AI Method
-
-| Feature | Claude Code | OpenAI Codex | Automation Generator |
-|---------|-------------|--------------|---------------------|
-| **Type** | Interactive assistant | Interactive assistant | One-shot command |
-| **Setup** | Install Claude CLI | Install Codex CLI | OpenAI API key in `.env` |
-| **Usage** | `claude` | `codex` | `make codex` or `make generate-automation` |
-| **Capabilities** | Full project | Full project | Automation only |
-| **Context** | Full codebase | Full project via tools | Entity registry |
-| **Instructions** | CLAUDE.md | AGENTS.md | System prompt |
-| **Best for** | Interactive dev | OpenAI preference | Quick generation |
-
-All methods:
+Both assistants:
 - ✅ Support entity naming conventions
 - ✅ Integrate with validation pipeline
 - ✅ Generate valid Home Assistant YAML

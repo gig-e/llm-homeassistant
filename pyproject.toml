@@ -14,7 +14,6 @@ dependencies = [
     "homeassistant>=2024.1.0",
     "voluptuous>=0.14.0",
     "pyyaml>=6.0.0",
-    "openai>=1.0.0",
 ]
 
 [project.optional-dependencies]

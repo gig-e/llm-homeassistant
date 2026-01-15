@@ -25,6 +25,3 @@ mkdocs-material>=9.5.0
 homeassistant>=2024.1.0
 voluptuous>=0.14.0
 pyyaml>=6.0.0
-
-# AI/LLM Integration
-openai>=1.0.0
