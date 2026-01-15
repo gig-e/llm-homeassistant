@@ -202,33 +202,50 @@ vacuum.office_roborock
 - New entities should follow this pattern
 - Vendor prefixes (aquanta_, august_, etc.) are replaced with descriptive device names
 
-### **AI-Powered Automation Creation:**
+### **AI-Powered Automation:**
 
-This project supports two methods for generating automations with AI:
+This project supports three methods for working with AI:
 
-**1. Claude Code (Interactive)** - Current default when using Claude Code CLI
-- Natural language automation creation through Claude
-- Direct integration with the codebase
-- Follows all validation and naming conventions
-- Best for: Interactive development, complex logic, code review
+**1. Claude Code (Interactive)** - You're using this now!
+- Full conversational AI assistant through Claude Code CLI
+- Reads CLAUDE.md for project-specific instructions
+- Direct integration with entire codebase
+- Can handle any task: automations, validation, exploration, troubleshooting
+- Best for: Interactive development, complex multi-step tasks, code review
 
-**2. OpenAI Codex (make codex)** - Alternative AI generation
-- Uses OpenAI API (GPT-4, GPT-3.5-turbo, etc.)
-- Standalone tool with context-aware generation
-- Automatic validation and entity discovery integration
-- Best for: Batch generation, specific model preferences, API-based workflows
+**2. OpenAI Assistant (make assistant)** - Interactive OpenAI alternative
+- Full conversational AI assistant through OpenAI API
+- Reads AGENTS.md (OpenAI standard format) for instructions
+- Function calling for file operations and command execution
+- Can handle any task like Claude Code
+- Best for: Using OpenAI models, API-based workflows, specific model preferences
 
-**Guidelines for Both Methods:**
-- When creating automations, always ask the user for input if there are multiple choices for sensors or devices
-- Use the entity explorer tools to discover available entities before writing automations
-- Follow the naming convention when suggesting entity names in automations
+**3. OpenAI Automation Generator (make codex)** - One-shot automation tool
+- Single-purpose tool for generating automations
+- Uses OpenAI API with entity registry context
+- Quick automation generation from descriptions
+- Best for: Batch generation, simple one-off automations
+
+**Quick Reference:**
+```bash
+# Interactive assistants (full capabilities)
+claude                                    # Claude Code (this)
+make assistant                            # OpenAI Assistant
+
+# One-shot automation generation
+make codex                                # OpenAI (interactive prompt)
+make generate-automation DESC='...'       # OpenAI (command line)
+```
+
+**Guidelines for All Methods:**
+- When creating automations, ask for clarification if multiple entity choices exist
+- Use entity explorer tools to discover available entities
+- Follow the naming convention: location_room_device_sensor
 - Run validation after generation: `make validate`
 
-**Choosing Between Claude Code and Codex:**
-- Use **Claude Code** for interactive, conversational automation creation
-- Use **make codex** when you want OpenAI-specific models or standalone generation
-- Both methods integrate with the same validation pipeline
-- Both support the entity naming convention
-- Results from both methods are validated identically
+**All three methods:**
+- Integrate with the same validation pipeline
+- Support the entity naming convention
+- Generate valid Home Assistant YAML
 
 - All python tools need to be run with  `source venv/bin/activate && python <tool_path>`

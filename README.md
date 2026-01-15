@@ -315,43 +315,31 @@ The system provides three layers of validation:
 - Most comprehensive check available
 - Catches integration-specific issues
 
-## 🤖 AI-Powered Automation Creation
+## 🤖 AI-Powered Automation
 
-This project supports **two methods** for AI-powered automation generation:
+This project supports **three AI methods** - two interactive assistants and one automation generator:
 
-### Method 1: Claude Code (Interactive)
+### Method 1: Claude Code (Interactive Assistant)
 
-Use Claude Code CLI for conversational automation creation:
+Full-featured conversational AI through Claude Code CLI:
 
-1. **Describe automations in English**:
-   ```
-   "Turn off all lights at midnight on weekdays"
-   ```
+- Reads `CLAUDE.md` for project instructions
+- Can handle any task: create automations, validate configs, explore entities, troubleshoot
+- Full codebase awareness and integration
+- Built-in validation and safety checks
 
-2. **Claude writes the YAML**:
-   ```yaml
-   - id: weekday_midnight_lights_off
-     alias: "Weekday Midnight Lights Off"
-     trigger:
-       - platform: time
-         at: "00:00:00"
-     condition:
-       - condition: time
-         weekday: [mon, tue, wed, thu, fri]
-     action:
-       - service: light.turn_off
-         target:
-           entity_id: all
-   ```
+**Usage**: Simply use Claude Code in this directory
 
-3. **Automatic validation ensures correctness**
-4. **Deploy safely with `make push`**
+**Best for**: Interactive development, complex multi-step tasks, code review, learning
 
-**Best for**: Interactive development, complex logic, code review
+### Method 2: OpenAI Assistant (Interactive)
 
-### Method 2: OpenAI Codex (Standalone Tool)
+Full-featured conversational AI through OpenAI API - works just like Claude Code:
 
-Use OpenAI API for batch automation generation:
+- Reads `AGENTS.md` (OpenAI standard format) for instructions
+- Can handle any task: create automations, validate configs, explore entities, troubleshoot
+- Function calling for file operations and command execution
+- Built-in validation and safety checks
 
 **Setup**:
 1. Get API key from [OpenAI Platform](https://platform.openai.com/api-keys)
@@ -360,33 +348,45 @@ Use OpenAI API for batch automation generation:
 
 **Usage**:
 ```bash
-# Interactive mode
+make assistant    # Start interactive session
+```
+
+**Best for**: Using OpenAI models, API-based workflows, teams preferring OpenAI
+
+### Method 3: OpenAI Automation Generator (One-Shot Tool)
+
+Quick automation generation for single-purpose tasks:
+
+**Usage**:
+```bash
+# Interactive prompt
 make codex
 
-# Quick generation
+# Command line (quick)
 make generate-automation DESC='Turn on kitchen lights when motion detected'
 
-# Generate and save automatically
+# Generate and save
 make generate-automation DESC='Motion activated basement lights' SAVE=yes
 
-# Use GPT-3.5 for faster/cheaper generation
+# Use GPT-3.5 (faster/cheaper)
 make generate-automation DESC='Close garage at 10pm' MODEL=gpt-3.5-turbo
 ```
 
-**Best for**: Batch generation, specific model preferences, API workflows
+**Best for**: Batch generation, quick one-off automations, scripting
 
 ### Choosing Your AI Method
 
-| Feature | Claude Code | OpenAI Codex |
-|---------|-------------|--------------|
-| **Setup** | Just open Claude Code | Requires OpenAI API key |
-| **Cost** | Claude subscription | Pay per token |
-| **Interaction** | Conversational | Command-based |
-| **Context** | Full codebase awareness | Entity registry context |
-| **Validation** | Automatic | Automatic |
-| **Best for** | Interactive development | Batch generation |
+| Feature | Claude Code | OpenAI Assistant | Automation Generator |
+|---------|-------------|------------------|---------------------|
+| **Type** | Interactive | Interactive | One-shot command |
+| **Setup** | Claude CLI | OpenAI API key | OpenAI API key |
+| **Cost** | Claude subscription | Pay per token | Pay per token |
+| **Capabilities** | Full project | Full project | Automation only |
+| **Context** | Full codebase | Full project via tools | Entity registry |
+| **Instructions** | CLAUDE.md | AGENTS.md | System prompt |
+| **Best for** | Interactive dev | API workflows | Quick generation |
 
-Both methods:
+All three methods:
 - ✅ Support entity naming conventions
 - ✅ Integrate with validation pipeline
 - ✅ Generate valid Home Assistant YAML
