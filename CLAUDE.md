@@ -204,48 +204,45 @@ vacuum.office_roborock
 
 ### **AI-Powered Automation:**
 
-This project supports three methods for working with AI:
+This project supports multiple AI assistants for managing your Home Assistant configuration:
 
-**1. Claude Code (Interactive)** - You're using this now!
-- Full conversational AI assistant through Claude Code CLI
+**1. Claude Code (Interactive Assistant)** - You're using this now!
+- Run `claude` in this directory
 - Reads CLAUDE.md for project-specific instructions
-- Direct integration with entire codebase
-- Can handle any task: automations, validation, exploration, troubleshooting
+- Full codebase awareness and integration
+- Handles any task: automations, validation, exploration, troubleshooting
 - Best for: Interactive development, complex multi-step tasks, code review
 
-**2. OpenAI Assistant (make assistant)** - Interactive OpenAI alternative
-- Full conversational AI assistant through OpenAI API
-- Reads AGENTS.md (OpenAI standard format) for instructions
-- Function calling for file operations and command execution
-- Can handle any task like Claude Code
-- Best for: Using OpenAI models, API-based workflows, specific model preferences
+**2. OpenAI Codex (Interactive Assistant)** - Alternative AI assistant
+- Run `codex` in this directory (requires OpenAI Codex CLI installed)
+- Reads AGENTS.md (standard format for AI agents)
+- Full project awareness through function calling
+- Handles any task like Claude Code
+- Best for: Using OpenAI models, teams preferring OpenAI
 
-**3. OpenAI Automation Generator (make codex)** - One-shot automation tool
-- Single-purpose tool for generating automations
+**3. OpenAI Automation Generator** - Quick automation tool
+- Run `make codex` or `make generate-automation DESC='...'`
 - Uses OpenAI API with entity registry context
-- Quick automation generation from descriptions
-- Best for: Batch generation, simple one-off automations
+- Generates single automation from description
+- Best for: Batch generation, simple one-off automations, scripting
 
 **Quick Reference:**
 ```bash
-# Interactive assistants (full capabilities)
-claude                                    # Claude Code (this)
-make assistant                            # OpenAI Assistant
+# Interactive AI assistants (full capabilities)
+claude                                    # Claude Code (you're using this)
+codex                                     # OpenAI Codex (if installed)
 
-# One-shot automation generation
+# Quick automation generation
 make codex                                # OpenAI (interactive prompt)
 make generate-automation DESC='...'       # OpenAI (command line)
 ```
 
-**Guidelines for All Methods:**
-- When creating automations, ask for clarification if multiple entity choices exist
+**All methods:**
+- Ask for clarification when multiple entity choices exist
 - Use entity explorer tools to discover available entities
-- Follow the naming convention: location_room_device_sensor
-- Run validation after generation: `make validate`
-
-**All three methods:**
+- Follow naming convention: location_room_device_sensor
+- Run validation after changes: `make validate`
 - Integrate with the same validation pipeline
-- Support the entity naming convention
 - Generate valid Home Assistant YAML
 
 - All python tools need to be run with  `source venv/bin/activate && python <tool_path>`

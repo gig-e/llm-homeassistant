@@ -20,7 +20,7 @@ YELLOW = \033[1;33m
 RED = \033[0;31m
 NC = \033[0m # No Color
 
-.PHONY: help pull push validate backup clean setup test status entities reload format-yaml check-env generate-automation codex assistant
+.PHONY: help pull push validate backup clean setup test status entities reload format-yaml check-env generate-automation codex
 
 # Default target
 help:
@@ -35,8 +35,7 @@ help:
 	@echo "  $(YELLOW)test$(NC)     - Run validation tests (alias for validate)"
 	@echo "  $(YELLOW)status$(NC)   - Show configuration status and entity counts"
 	@echo "  $(YELLOW)entities$(NC) - Explore available entities (usage: make entities [ARGS='options'])"
-	@echo "  $(YELLOW)assistant$(NC) - Start interactive OpenAI assistant (reads AGENTS.md)"
-	@echo "  $(YELLOW)codex$(NC)    - Generate automation using OpenAI (one-shot mode)"
+	@echo "  $(YELLOW)codex$(NC)    - Generate automation using OpenAI (interactive mode)"
 	@echo "  $(YELLOW)generate-automation$(NC) - Generate automation with options (usage: make generate-automation DESC='...' [SAVE=yes])"
 	@echo "  $(YELLOW)reload$(NC)   - Reload Home Assistant configuration (without pushing)"
 	@echo "  $(YELLOW)format-yaml$(NC) - Format YAML files (usage: make format-yaml [FILES='file1.yaml file2.yaml'])"
@@ -162,23 +161,6 @@ generate-automation: check-setup
 	fi; \
 	. $(VENV_PATH)/bin/activate && python $(TOOLS_PATH)/codex_automation_generator.py \
 		--description "$(DESC)" $$SAVE_FLAG $$MODEL_FLAG
-
-# Start interactive OpenAI assistant
-assistant: check-setup
-	@echo "$(GREEN)OpenAI Interactive Assistant$(NC)"
-	@echo "=================================="
-	@if [ -z "$(OPENAI_API_KEY)" ]; then \
-		echo "$(RED)Error: OPENAI_API_KEY not set.$(NC)"; \
-		echo "$(YELLOW)Please set it in your .env file or environment:$(NC)"; \
-		echo "  OPENAI_API_KEY=your-api-key-here"; \
-		echo ""; \
-		echo "Get an API key from: https://platform.openai.com/api-keys"; \
-		exit 1; \
-	fi
-	@echo "$(YELLOW)Launching interactive assistant...$(NC)"
-	@echo "$(YELLOW)The assistant will read AGENTS.md for instructions.$(NC)"
-	@echo ""
-	@. $(VENV_PATH)/bin/activate && python $(TOOLS_PATH)/codex_assistant.py
 
 # Reload Home Assistant configuration via API
 reload: check-setup

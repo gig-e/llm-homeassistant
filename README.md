@@ -317,7 +317,7 @@ The system provides three layers of validation:
 
 ## 🤖 AI-Powered Automation
 
-This project supports **three AI methods** - two interactive assistants and one automation generator:
+This project supports multiple AI assistants and tools for managing your Home Assistant configuration:
 
 ### Method 1: Claude Code (Interactive Assistant)
 
@@ -328,34 +328,35 @@ Full-featured conversational AI through Claude Code CLI:
 - Full codebase awareness and integration
 - Built-in validation and safety checks
 
-**Usage**: Simply use Claude Code in this directory
+**Usage**: Run `claude` in this directory
 
 **Best for**: Interactive development, complex multi-step tasks, code review, learning
 
-### Method 2: OpenAI Assistant (Interactive)
+### Method 2: OpenAI Codex (Interactive Assistant)
 
-Full-featured conversational AI through OpenAI API - works just like Claude Code:
+Full-featured conversational AI through OpenAI Codex CLI - works just like Claude Code:
 
-- Reads `AGENTS.md` (OpenAI standard format) for instructions
+- Reads `AGENTS.md` ([standard format](https://agents.md/) for AI coding agents)
 - Can handle any task: create automations, validate configs, explore entities, troubleshoot
-- Function calling for file operations and command execution
+- Full project awareness through built-in tools
 - Built-in validation and safety checks
+
+**Setup**:
+1. Install OpenAI Codex CLI (follow OpenAI's installation instructions)
+2. Configure your OpenAI API key (per Codex setup)
+
+**Usage**: Run `codex` in this directory
+
+**Best for**: Using OpenAI models, API-based workflows, teams preferring OpenAI
+
+### Method 3: OpenAI Automation Generator (Quick Tool)
+
+Quick automation generation for single-purpose tasks:
 
 **Setup**:
 1. Get API key from [OpenAI Platform](https://platform.openai.com/api-keys)
 2. Add to `.env`: `OPENAI_API_KEY=your-key-here`
 3. Optionally set model: `OPENAI_MODEL=gpt-4`
-
-**Usage**:
-```bash
-make assistant    # Start interactive session
-```
-
-**Best for**: Using OpenAI models, API-based workflows, teams preferring OpenAI
-
-### Method 3: OpenAI Automation Generator (One-Shot Tool)
-
-Quick automation generation for single-purpose tasks:
 
 **Usage**:
 ```bash
@@ -376,17 +377,17 @@ make generate-automation DESC='Close garage at 10pm' MODEL=gpt-3.5-turbo
 
 ### Choosing Your AI Method
 
-| Feature | Claude Code | OpenAI Assistant | Automation Generator |
-|---------|-------------|------------------|---------------------|
-| **Type** | Interactive | Interactive | One-shot command |
-| **Setup** | Claude CLI | OpenAI API key | OpenAI API key |
-| **Cost** | Claude subscription | Pay per token | Pay per token |
+| Feature | Claude Code | OpenAI Codex | Automation Generator |
+|---------|-------------|--------------|---------------------|
+| **Type** | Interactive assistant | Interactive assistant | One-shot command |
+| **Setup** | Install Claude CLI | Install Codex CLI | OpenAI API key in `.env` |
+| **Usage** | `claude` | `codex` | `make codex` or `make generate-automation` |
 | **Capabilities** | Full project | Full project | Automation only |
 | **Context** | Full codebase | Full project via tools | Entity registry |
 | **Instructions** | CLAUDE.md | AGENTS.md | System prompt |
-| **Best for** | Interactive dev | API workflows | Quick generation |
+| **Best for** | Interactive dev | OpenAI preference | Quick generation |
 
-All three methods:
+All methods:
 - ✅ Support entity naming conventions
 - ✅ Integrate with validation pipeline
 - ✅ Generate valid Home Assistant YAML
